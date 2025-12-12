@@ -26,9 +26,24 @@ public class UserController {
         return ResponseEntity.ok(userService.getAllUsers());
     }
 
+    @GetMapping("/{userId}")
+    public ResponseEntity<UserDto> getUserById(@PathVariable("userId") String userId){
+        return ResponseEntity.ok(userService.getUserById(userId));
+    }
+
     @GetMapping("/email")
-    public ResponseEntity<UserDto> findUserByEmail(@RequestParam String email){
+    public ResponseEntity<UserDto> getUserByEmail(@RequestParam String email){
         return ResponseEntity.ok(userService.getUserByEmail(email));
+    }
+
+    @DeleteMapping("/{userId}")
+    public void deleteUser(@PathVariable("userId") String userId){
+        userService.deleteUser(userId);
+    }
+
+    @PutMapping("/{userId}")
+    public ResponseEntity<UserDto> updateUser(@RequestBody UserDto userDto, @PathVariable("userId") String userId){
+        return ResponseEntity.ok(userService.updateUser(userDto,userId));
     }
 
 }

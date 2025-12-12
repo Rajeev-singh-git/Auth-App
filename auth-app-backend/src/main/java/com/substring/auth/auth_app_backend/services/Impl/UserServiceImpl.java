@@ -11,6 +11,10 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import java.util.UUID;
+
+import static com.substring.auth.auth_app_backend.helper.UserHelper.parseUUID;
+
 
 @Service
 @RequiredArgsConstructor
@@ -51,21 +55,32 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto updateUser(UserDto userDto, String userId) {
-        return null;
+        UUID uid  = parseUUID(userId);
+        User existingUser = userRepository
+                .findById(uid)
+                .orElseThrow(()->new ResourceNotFoundException("User with provided uuid does not exist"));
+        if(existingUser.getName()!= null) existingUser.setName(userDto.getName());
+        if(existingUser.getImage()!= null) existingUser.setImage(userDto.getImage());
+        if(existingUser.getProvider()!= null) existingUser.setProvider(userDto.getProvider());
+        // TODO: Change password update logic
+        if(existingUser.getPassword()!= null) existingUser.setPassword(userDto.getPassword());
+        existingUser.setEnabled(userDto.isEnabled());
+        User updatedUser = userRepository.save(existingUser);
+        return modelMapper.map(updatedUser,UserDto.class);
     }
 
     @Override
     public void deleteUser(String userId) {
-
+        UUID uid = parseUUID(userId);
+        User user = userRepository.findById(uid).orElseThrow(()->new ResourceNotFoundException("User with provided uuid does not exist"));
+        userRepository.delete(user);
     }
 
     @Override
     public UserDto getUserById(String userId) {
-//        if(!userRepository.findById(UUID.fromString(userId))){
-//
-//        }
-
-        return null;
+        UUID uid = parseUUID(userId);
+        User user = userRepository.findById(uid).orElseThrow(()->new ResourceNotFoundException("User with provided uuid does not exist"));
+        return modelMapper.map(user,UserDto.class);
     }
 
     @Override
