@@ -38,7 +38,8 @@ public class UserServiceImpl implements UserService {
         User user = modelMapper.map(userDto, User.class);
         user.setProvider(userDto.getProvider() != null ? userDto.getProvider() : Provider.LOCAL);
 
-        User savedUser = userRepository.save(user);
+        //  User savedUser = userRepository.save(user);
+        User savedUser = userRepository.saveAndFlush(user);
         return modelMapper.map(savedUser, UserDto.class);
     }
 

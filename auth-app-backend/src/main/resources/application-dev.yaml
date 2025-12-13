@@ -1,0 +1,43 @@
+server:
+  port:8083
+
+# database connections
+
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/auth_app_yt
+    username: ${MYSQL_DB_USER}
+    password: ${MYSQL_DB_PASSWORD}
+
+  #    hikari:
+  #      pool-name: HikariCP
+  #      maximum-pool-size: 5
+  #      connection-timeout: 100000
+  #      idle-timeout: 600000
+  #      max-lifetime: 1800000
+  #      validation-timeout: 1800000
+  #      leak-detection-threshold: 0
+  #      initialization-fail-timeout: -1
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+#    show-sql: true
+
+logging:
+  level:
+    org.springframework.security: DEBUG
+
+security:
+  jwt:
+    secret: "${JWT_SECRET:my-super-secure-64-character-secret-longer-than-you-can-think-of-key-1234567890!@#$%^}"
+    issuer: ${JWT_ISSUER:api.substring.com}
+    access-ttl-seconds: ${JWT_ACCESS_TTL_SECONDS:3600}
+    refresh-ttl-seconds: ${JWT_REFRESH_TTL_SECONDS:86400}
+    refresh-token-cookie-name: ${JWT_REFRESH_COOKIE_NAME:refreshToken}
+    cookie-secure: ${JWT_COOKIE_SECURE:true}
+    cookie-http-only: ${JWT_COOKIE_HTTP_ONLY:true}
+    cookie-same-site: ${JWT_COOKIE_SAME_SITE:lax}
